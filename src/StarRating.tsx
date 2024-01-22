@@ -24,6 +24,7 @@ const StarRating = ({
 }) => {
   const starRef = useRef<number>(initialRate ? initialRate : 0);
   const temporaryRef = useRef<number | null>(0);
+  const previousTemporaryRef = useRef<number | null>(0);
   const forceUpdate = useReducer(() => ({}), {})[1];
   const ref = useRef<HTMLDivElement>(null);
 
@@ -92,7 +93,10 @@ const StarRating = ({
       starsNumber,
       incrementPrecision
     );
-    forceUpdate();
+    if (previousTemporaryRef.current !== temporaryRef.current) {
+      previousTemporaryRef.current = temporaryRef.current;
+      forceUpdate();
+    }
   };
 
   const handleMouseLeave = () => {
