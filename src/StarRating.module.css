@@ -1,0 +1,17 @@
+.star {
+  position: relative;
+  cursor: pointer;
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.fullIcons {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: width .3s, color .3s;
+}
