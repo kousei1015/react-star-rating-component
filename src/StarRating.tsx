@@ -27,6 +27,16 @@ const StarRating = ({
   const forceUpdate = useReducer(() => ({}), {})[1];
   const ref = useRef<HTMLDivElement>(null);
 
+  const calculateRating = (
+    x: number,
+    width: number,
+    starsNumber: number,
+    precision: number
+  ) => {
+    const factor = precision === 0.1 ? 10 : precision === 0.5 ? 2 : 1;
+    return Math.round((x / width) * starsNumber * factor) / factor;
+  };
+
   useEffect(() => {
     // starsNumberに渡す数値が0以下だと、そもそも画面に何も表示されなくなる。
     // そのため、starsNumberに渡す数値が0以下の際には、コンソールにエラーを出している
@@ -57,15 +67,12 @@ const StarRating = ({
     // 0.5の場合は0.5刻みの数値(「1.5」、「2.0」、「2.5」といった数値)
     // 1の場合は1刻みの数値(「1」、「2」、「3」といった数値)
     // 0.1の場合は0.1刻みの数値(「1.1」、「1.3」といった数値)に変更することができる
-    if (incrementPrecision === 0.5) {
-      starRef.current = Math.round((x / width) * starsNumber * 2) / 2;
-    } else if (incrementPrecision === 1) {
-      starRef.current = Math.round((x / width) * starsNumber);
-    } else if (incrementPrecision === 0.1) {
-      starRef.current = Math.round((x / width) * starsNumber * 10) / 10;
-    }
-
-    debugger;
+    starRef.current = calculateRating(
+      x,
+      width,
+      starsNumber,
+      incrementPrecision
+    );
 
     // 以下は再レンダリングを走らせるための処理
     if (onClick) {
@@ -79,13 +86,12 @@ const StarRating = ({
     const { width, left } = ref.current?.getBoundingClientRect()!;
     const x = event.clientX - left;
 
-    if (incrementPrecision === 0.5) {
-      temporaryRef.current = Math.round((x / width) * starsNumber * 2) / 2;
-    } else if (incrementPrecision === 1) {
-      temporaryRef.current = Math.round((x / width) * starsNumber);
-    } else if (incrementPrecision === 0.1) {
-      temporaryRef.current = Math.round((x / width) * starsNumber * 10) / 10;
-    }
+    temporaryRef.current = calculateRating(
+      x,
+      width,
+      starsNumber,
+      incrementPrecision
+    );
     forceUpdate();
   };
 
