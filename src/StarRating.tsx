@@ -8,8 +8,8 @@ const StarRating = ({
   readonly = false,
   initialRate,
   starSize = 40,
-  emptyColor = "black",
-  fillColor = "yellow",
+  emptyColor = "silver",
+  fillColor = "gold",
   hoverable = false,
 }: {
   starsNumber?: number;
@@ -122,7 +122,7 @@ const StarRating = ({
         className={styles.star}
         style={readonly ? { cursor: "default" } : { cursor: "pointer" }}
       >
-        <span style={{ color: "rgb(204, 204, 204)" }}>
+        <span style={{ color: "silver" }}>
           {[...Array(starsNumber)].map((_, index) => (
             <svg
               key={index}
