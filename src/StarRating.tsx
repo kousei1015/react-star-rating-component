@@ -105,7 +105,7 @@ const StarRating = ({
   };
 
   const widthPercent = useMemo(() => {
-    if (temporaryRef.current !== null) {
+    if (hoverable && temporaryRef.current !== null) {
       return (temporaryRef.current / starsNumber) * 100 + "%";
     } else {
       return (starRef.current / starsNumber) * 100 + "%";
