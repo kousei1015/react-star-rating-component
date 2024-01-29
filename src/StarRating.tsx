@@ -11,6 +11,7 @@ const StarRating = ({
   emptyColor = "silver",
   fillColor = "gold",
   hoverable = false,
+  CustomIcon,
 }: {
   starsNumber?: number;
   onClick?: (rate: number) => void;
@@ -21,6 +22,10 @@ const StarRating = ({
   emptyColor?: string;
   fillColor?: string;
   hoverable?: boolean;
+  CustomIcon?: React.ComponentType<{
+    size: number;
+    color: string;
+  }>;
 }) => {
   const starRef = useRef<number>(initialRate ? initialRate : 0);
   const temporaryRef = useRef<number | null>(0);
@@ -124,16 +129,24 @@ const StarRating = ({
       >
         <span style={{ color: "silver" }}>
           {[...Array(starsNumber)].map((_, index) => (
-            <svg
-              key={index}
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="-100 -100 200 200"
-              width={starSize}
-              height={starSize}
-              fill={emptyColor}
-            >
-              <polygon points="0,-100 29.39,-40.45 95.11,-30.9 47.55,15.45 58.78,80.90 0,50 -58.78,80.9 -47.55,15.45 -95.11,-30.9 -29.39,-40.45" />
-            </svg>
+            <>
+              {CustomIcon ? (
+                <CustomIcon
+                  size={starSize}
+                  color={emptyColor}
+                />
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="-100 -100 200 200"
+                  width={starSize}
+                  height={starSize}
+                  fill={emptyColor}
+                >
+                  <polygon points="0,-100 29.39,-40.45 95.11,-30.9 47.55,15.45 58.78,80.90 0,50 -58.78,80.9 -47.55,15.45 -95.11,-30.9 -29.39,-40.45" />
+                </svg>
+              )}
+            </>
           ))}
         </span>
 
@@ -144,16 +157,24 @@ const StarRating = ({
           }}
         >
           {[...Array(starsNumber)].map((_, index) => (
-            <svg
-              key={index}
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="-100 -100 200 200"
-              width={starSize}
-              height={starSize}
-              fill={fillColor}
-            >
-              <polygon points="0,-100 29.39,-40.45 95.11,-30.9 47.55,15.45 58.78,80.90 0,50 -58.78,80.9 -47.55,15.45 -95.11,-30.9 -29.39,-40.45" />
-            </svg>
+            <>
+              {CustomIcon ? (
+                <CustomIcon
+                  size={starSize}
+                  color={fillColor}
+                />
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="-100 -100 200 200"
+                  width={starSize}
+                  height={starSize}
+                  fill={fillColor}
+                >
+                  <polygon points="0,-100 29.39,-40.45 95.11,-30.9 47.55,15.45 58.78,80.90 0,50 -58.78,80.9 -47.55,15.45 -95.11,-30.9 -29.39,-40.45" />
+                </svg>
+              )}
+            </>
           ))}
         </span>
       </div>

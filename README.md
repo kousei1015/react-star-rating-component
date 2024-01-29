@@ -3,7 +3,8 @@
 React で星型の評価を実装する際、案外便利なライブラリが多くないと思い、ならば自力で実装してみようとこのレポジトリを作ってみました。ライブラリを作成したわけではなく、あくまで星型の評価を実装できるコンポーネントを書いただけですが。こだわった点としては数値の細かな調整が可能という点です。以下のように呼び出します。必須のプロパティ自体はないですが、基本的(後述するrealOnlyプロパティにtrueを渡さない場合)にはonClickプロパティが必要となります。
 
 ## 追記
-hoverableプロパティを追加し、それにtrue(デフォルトではfalseを渡している)を渡すと、ホバーした際にもアイコンの色が変わるように変更しました。
+ 1. 1/26 にhoverableプロパティを追加し、それにtrue(デフォルトではfalseを渡している)を渡すと、ホバーした際にもアイコンの色が変わるように変更しました。
+ 2. 1/29 にCustomIconプロパティを追加しました。これにより、デフォルトの星型のアイコンの代わりに、react-iconsから任意のアイコンを表示できるようにしました。
 
 ## 使い方
 ```
@@ -202,3 +203,42 @@ const StarRating = ({
 
 export default StarRating;
 ```
+
+
+## CustomIconプロパティについて
+デフォルトでは星型のアイコンだけしか使えませんでしたが、CustomIconプロパティにreact-iconsの任意の画像を渡すことで、星型のアイコン以外も表示できるようにしました。試しに、react-iconsのハートの画像を星型のアイコンの代わりに表示させたいとしたら以下のように書けます。
+
+```
+import { useState } from "react";
+import StarRating from "./StarRating";
+// reat-iconsから下記のようにハートの画像をimportする
+import { FaHeart } from "react-icons/fa";
+
+const App = () => {
+  const [heart, setHeart] = useState(0);
+
+  const clickHeart = (rate: number) => {
+    setHeart(rate);
+  };
+
+
+  return (
+    <div>
+      <StarRating
+        onClick={clickHeart}
+        CustomIcon={FaHeart}
+        fillColor="pink"
+      />
+
+      {/* 下のspanタグの「{star}」は、数値を表示させるために記述 */}
+      <span>{heart}</span>
+    </div>
+  );
+};
+
+export default App;
+```
+
+以下が上記のコードの出力画面です。(fillColorプロパティに"pink"を渡すことで、画像の色は変更できます。)
+
+![カスタムアイコンを使用した画像](./images/scrennshot5.png)
