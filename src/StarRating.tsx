@@ -12,6 +12,7 @@ const StarRating = ({
   fillColor = "gold",
   hoverable = false,
   CustomIcon,
+  customStyle,
 }: {
   starsNumber?: number;
   onClick?: (rate: number) => void;
@@ -25,7 +26,9 @@ const StarRating = ({
   CustomIcon?: React.ComponentType<{
     size: number;
     color: string;
+    style?: React.CSSProperties;
   }>;
+  customStyle?: React.CSSProperties;
 }) => {
   const starRef = useRef<number>(initialRate ? initialRate : 0);
   const temporaryRef = useRef<number | null>(0);
@@ -134,6 +137,7 @@ const StarRating = ({
                 <CustomIcon
                   size={starSize}
                   color={emptyColor}
+                  style={customStyle}
                 />
               ) : (
                 <svg
@@ -142,6 +146,7 @@ const StarRating = ({
                   width={starSize}
                   height={starSize}
                   fill={emptyColor}
+                  style={customStyle}
                 >
                   <polygon points="0,-100 29.39,-40.45 95.11,-30.9 47.55,15.45 58.78,80.90 0,50 -58.78,80.9 -47.55,15.45 -95.11,-30.9 -29.39,-40.45" />
                 </svg>
@@ -162,6 +167,7 @@ const StarRating = ({
                 <CustomIcon
                   size={starSize}
                   color={fillColor}
+                  style={customStyle}
                 />
               ) : (
                 <svg
@@ -170,6 +176,7 @@ const StarRating = ({
                   width={starSize}
                   height={starSize}
                   fill={fillColor}
+                  style={customStyle}
                 >
                   <polygon points="0,-100 29.39,-40.45 95.11,-30.9 47.55,15.45 58.78,80.90 0,50 -58.78,80.9 -47.55,15.45 -95.11,-30.9 -29.39,-40.45" />
                 </svg>
