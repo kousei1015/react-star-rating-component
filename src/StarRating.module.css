@@ -1,4 +1,4 @@
-.star {
+.wrapper {
   position: relative;
   cursor: pointer;
   display: inline-block;
@@ -6,7 +6,7 @@
   white-space: nowrap;
 }
 
-.fullIcons {
+.fillIcons {
   position: absolute;
   left: 0;
   top: 0;

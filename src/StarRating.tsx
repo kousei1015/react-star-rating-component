@@ -1,4 +1,5 @@
 import { useRef, useReducer, useMemo, useEffect } from "react";
+import { calculateRating } from "./utils";
 import styles from "./StarRating.module.css";
 
 const StarRating = ({
@@ -36,16 +37,6 @@ const StarRating = ({
   const forceUpdate = useReducer(() => ({}), {})[1];
   const ref = useRef<HTMLDivElement>(null);
 
-  const calculateRating = (
-    x: number,
-    width: number,
-    starsNumber: number,
-    precision: number
-  ) => {
-    const factor = precision === 0.1 ? 10 : precision === 0.5 ? 2 : 1;
-    return Math.round((x / width) * starsNumber * factor) / factor;
-  };
-
   useEffect(() => {
     // starsNumberに渡す数値が0以下だと、そもそも画面に何も表示されなくなる。
     // そのため、starsNumberに渡す数値が0以下の際には、コンソールにエラーを出している
@@ -72,10 +63,6 @@ const StarRating = ({
 
     const x = event.clientX - left;
 
-    // 以下の条件文は細かさの調整をしている
-    // 0.5の場合は0.5刻みの数値(「1.5」、「2.0」、「2.5」といった数値)
-    // 1の場合は1刻みの数値(「1」、「2」、「3」といった数値)
-    // 0.1の場合は0.1刻みの数値(「1.1」、「1.3」といった数値)に変更することができる
     starRef.current = calculateRating(
       x,
       width,
@@ -127,11 +114,11 @@ const StarRating = ({
         onClick={readonly ? undefined : handleClick}
         onMouseMove={readonly || !hoverable ? undefined : handleMouseMove}
         onMouseLeave={readonly || !hoverable ? undefined : handleMouseLeave}
-        className={styles.star}
+        className={styles.wrapper}
         style={readonly ? { cursor: "default" } : { cursor: "pointer" }}
       >
-        <span style={{ color: "silver" }}>
-          {[...Array(starsNumber)].map((_, index) => (
+        <span>
+          {[...Array(starsNumber)].map((_) => (
             <>
               {CustomIcon ? (
                 <CustomIcon
@@ -156,12 +143,12 @@ const StarRating = ({
         </span>
 
         <span
-          className={styles.fullIcons}
+          className={styles.fillIcons}
           style={{
             width: widthPercent,
           }}
         >
-          {[...Array(starsNumber)].map((_, index) => (
+          {[...Array(starsNumber)].map((_) => (
             <>
               {CustomIcon ? (
                 <CustomIcon
