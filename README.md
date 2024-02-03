@@ -5,6 +5,7 @@ React で星型の評価を実装する際、案外便利なライブラリが�
 ## 追記
  1. 1/26 にhoverableプロパティを追加し、それにtrue(デフォルトではfalseを渡している)を渡すと、ホバーした際にもアイコンの色が変わるように変更しました。
  2. 1/29 にCustomIconプロパティを追加しました。これにより、デフォルトの星型のアイコンの代わりに、react-iconsから任意のアイコンを表示できるようにしました。
+ 3. 任意のstyleをアイコンに渡せる様にしました
 
 ## 使い方
 ```
@@ -242,3 +243,38 @@ export default App;
 以下が上記のコードの出力画面です。(fillColorプロパティに"pink"を渡すことで、画像の色は変更できます。)
 
 ![カスタムアイコンを使用した画像](./images/scrennshot5.png)
+
+## customStyleプロパティについて
+
+このプロパティは任意のstyleを渡せる様にしたものです。例えば、下記のようにcustomStyleプロパティを渡すことでアイコンとアイコンの間にmarginを設定することができます。渡し方としては、inline-styleと同じように書けば動作します。
+
+```
+const App = () => {
+  const [heart, setHeart] = useState(0);
+
+  const clickHeart = (rate: number) => {
+    setHeart(rate);
+  };
+
+
+  return (
+    <div>
+      <StarRating
+        onClick={clickHeart}
+        CustomIcon={FaHeart}
+        fillColor="pink"
+        // 左右のmarginを設定する場合のコード
+        customStyle={{margin: "0 8px"}}
+      />
+      {/* 下のspanタグの「{star}」は、数値を表示させるために記述 */}
+      <span>{heart}</span>
+    </div>
+  );
+};
+
+export default App;
+```
+
+このように書くことで下記のようにmarginが設定できる。一個上のすぐの画像と比べると、左右に隙間が広がっていることがわかると思います。上記の例ではCustomIconにcustomStyleを渡していますが、デフォルトの星型のアイコンにもcustomStyleを渡せます。
+
+![customStyleを設定した場合のアイコンの画像](./images/screenshot6.png)
