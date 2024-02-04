@@ -1,4 +1,4 @@
-import { useRef, useReducer, useMemo, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import { calculateRating } from "./utils";
 import styles from "./StarRating.module.css";
 
@@ -31,10 +31,8 @@ const StarRating = ({
   }>;
   customStyle?: React.CSSProperties;
 }) => {
-  const starRef = useRef<number>(initialRate ? initialRate : 0);
-  const temporaryRef = useRef<number | null>(0);
-  const previousTemporaryRef = useRef<number | null>(0);
-  const forceUpdate = useReducer(() => ({}), {})[1];
+  const [starRate, setStarRate] = useState<number>(initialRate || 0);
+  const [temporaryRate, setTemporaryRate] = useState<number | null>(null);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -46,35 +44,30 @@ const StarRating = ({
       );
     }
 
-    // 初期値の値を反映させるために再レンダリングを走らせている
-    if (initialRate) {
-      starRef.current = initialRate;
-      onClick ? onClick(starRef.current) : forceUpdate();
-    }
-
     // 初期値はアイコン(星)の数より大きいということはあり得ないので、その場合の警告を出している
     if (initialRate && initialRate > starsNumber) {
       console.error("初期値は星の数より小さい数値を渡してください");
     }
   }, [starsNumber, initialRate]);
 
+  useEffect(() => {
+    // 初期値の値を反映させるために再レンダリングを走らせている
+    if (initialRate) {
+      setStarRate(initialRate);
+      onClick && onClick(initialRate)
+    }
+  }, [initialRate]);
+
   const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
     const { width, left } = ref.current?.getBoundingClientRect()!;
-
     const x = event.clientX - left;
 
-    starRef.current = calculateRating(
-      x,
-      width,
-      starsNumber,
-      incrementPrecision
-    );
+    const newRate = calculateRating(x, width, starsNumber, incrementPrecision);
 
-    // 以下は再レンダリングを走らせるための処理
+    setStarRate(newRate);
+
     if (onClick) {
-      onClick(starRef.current);
-    } else {
-      forceUpdate();
+      onClick(newRate);
     }
   };
 
@@ -82,30 +75,27 @@ const StarRating = ({
     const { width, left } = ref.current?.getBoundingClientRect()!;
     const x = event.clientX - left;
 
-    temporaryRef.current = calculateRating(
+    const newTemporaryRate = calculateRating(
       x,
       width,
       starsNumber,
       incrementPrecision
     );
-    if (previousTemporaryRef.current !== temporaryRef.current) {
-      previousTemporaryRef.current = temporaryRef.current;
-      forceUpdate();
-    }
+
+    setTemporaryRate(newTemporaryRate);
   };
 
   const handleMouseLeave = () => {
-    temporaryRef.current = null;
-    forceUpdate();
+    setTemporaryRate(null);
   };
 
   const widthPercent = useMemo(() => {
-    if (hoverable && temporaryRef.current !== null) {
-      return (temporaryRef.current / starsNumber) * 100 + "%";
+    if (hoverable && temporaryRate !== null) {
+      return (temporaryRate / starsNumber) * 100 + "%";
     } else {
-      return (starRef.current / starsNumber) * 100 + "%";
+      return (starRate / starsNumber) * 100 + "%";
     }
-  }, [starRef.current, starsNumber, temporaryRef.current]);
+  }, [starRate, starsNumber, temporaryRate]);
 
   return (
     <>
